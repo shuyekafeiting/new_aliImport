@@ -365,7 +365,15 @@ namespace WindowsFormsApp1
             this.Command.CommandText = sql;
             MySqlDataAdapter adpter = new MySqlDataAdapter(this.Command);
             DataTable dt = new DataTable("Table");
-            adpter.Fill(dt);
+            try
+            {
+                adpter.Fill(dt);
+            }
+            catch
+            {
+
+            }
+            
 
             this.RecordCount = dt.Rows.Count;
             this.FieldCount = dt.Columns.Count;
