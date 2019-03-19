@@ -10,8 +10,8 @@ namespace WindowsFormsApp1
 {
     class Trade
     {
+        private string importUrl = "";
         private string logAdd = "";//日志地址
-        private string importUrl = ConfigHelper.GetAppConfig("importUrl");
         private int ifHanddleStart = 0;//手动导单是否开始
         private int ifProsseStart = 0;//是否已经有线程在导单
         private string acc;//当前处理的账户
@@ -21,13 +21,14 @@ namespace WindowsFormsApp1
         private BackgroundWorker BackWorker;
         private Button Button;
         public int runStatus=1;
-        public Trade(string nick, TextBox out_text1,ProgressBar _progressBar,Button button) {
+        public Trade(string nick, TextBox out_text1,ProgressBar _progressBar,Button button,string importUrl1) {
             logAdd = "logs/" + nick + ".log";
             acc = nick;
             out_text = out_text1;
             ProgressBar = _progressBar;
             Button = button;
-        }
+            importUrl = importUrl1;
+    }
         //开启导单进程
         public void beginImportPress(object send)
         {
@@ -129,11 +130,11 @@ namespace WindowsFormsApp1
             switch (tradeType)
             {
                 case 1:
-                    getUrl = importUrl + "start_time=" + start_time + "&order_query_type=create_time&page_no=" + page + "&acc=" + acc;//订单创建
+                    getUrl = importUrl + "&start_time=" + start_time + "&order_query_type=create_time&page_no=" + page + "&acc=" + acc;//订单创建
                     tradeTypeStr = "创建订单";
                     break;
                 case 2:
-                    getUrl = importUrl + "start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc;//计算订单
+                    getUrl = importUrl + "&start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc;//计算订单
                     tradeTypeStr = "结算订单";
                     break;
             }

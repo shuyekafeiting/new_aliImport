@@ -31,8 +31,18 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.choose = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.num = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.acc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.update = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.insert = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.method = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.action = new System.Windows.Forms.DataGridViewButtonColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ifuseing = new System.Windows.Forms.ComboBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,7 +50,6 @@
             this.accWord = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.DateTimePicker_end = new System.Windows.Forms.DateTimePicker();
-            this.label3 = new System.Windows.Forms.Label();
             this.DateTimePicker_start = new System.Windows.Forms.DateTimePicker();
             this.button1 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -64,15 +73,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.statu = new System.Windows.Forms.Timer(this.components);
-            this.choose = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.num = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.acc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.update = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.insert = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.method = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.action = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.ddlxBox = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.qulyBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -82,6 +87,7 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -113,39 +119,107 @@
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDown);
             // 
+            // choose
+            // 
+            this.choose.HeaderText = "选择";
+            this.choose.Name = "choose";
+            this.choose.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.choose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // num
+            // 
+            this.num.HeaderText = "序号";
+            this.num.Name = "num";
+            this.num.Width = 60;
+            // 
+            // acc
+            // 
+            this.acc.HeaderText = "账户名";
+            this.acc.Name = "acc";
+            // 
+            // update
+            // 
+            this.update.HeaderText = "更新";
+            this.update.Name = "update";
+            this.update.Width = 60;
+            // 
+            // insert
+            // 
+            this.insert.HeaderText = "插入";
+            this.insert.Name = "insert";
+            this.insert.Width = 60;
+            // 
+            // method
+            // 
+            this.method.HeaderText = "用途 ";
+            this.method.Name = "method";
+            this.method.Width = 80;
+            // 
+            // lastTime
+            // 
+            this.lastTime.HeaderText = "最后更新时间";
+            this.lastTime.Name = "lastTime";
+            this.lastTime.Width = 160;
+            // 
+            // status
+            // 
+            this.status.HeaderText = "状态";
+            this.status.Name = "status";
+            this.status.Width = 90;
+            // 
+            // action
+            // 
+            this.action.HeaderText = "操作";
+            this.action.Name = "action";
+            this.action.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.action.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.action.Text = "单个导单";
+            this.action.UseColumnTextForButtonValue = true;
+            this.action.Width = 80;
+            // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.checkBox1);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.ifuseing);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.accOwner);
             this.groupBox1.Controls.Add(this.accWord);
-            this.groupBox1.Location = new System.Drawing.Point(8, 13);
+            this.groupBox1.Location = new System.Drawing.Point(8, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(425, 53);
+            this.groupBox1.Size = new System.Drawing.Size(531, 53);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "筛选账户";
+            this.groupBox1.Text = "筛选条件";
             // 
-            // checkBox1
+            // label3
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(311, 22);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBox1.Size = new System.Drawing.Size(48, 16);
-            this.checkBox1.TabIndex = 6;
-            this.checkBox1.Text = "使用";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(320, 21);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "是否使用";
+            // 
+            // ifuseing
+            // 
+            this.ifuseing.FormattingEnabled = true;
+            this.ifuseing.Items.AddRange(new object[] {
+            "全部所有",
+            "正在使用",
+            "不在使用"});
+            this.ifuseing.Location = new System.Drawing.Point(376, 18);
+            this.ifuseing.Name = "ifuseing";
+            this.ifuseing.Size = new System.Drawing.Size(78, 20);
+            this.ifuseing.TabIndex = 5;
+            this.ifuseing.Text = "全部所有";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(376, 21);
+            this.button2.Location = new System.Drawing.Point(480, 16);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(28, 21);
+            this.button2.Size = new System.Drawing.Size(29, 25);
             this.button2.TabIndex = 4;
             this.button2.Text = "搜";
             this.button2.UseVisualStyleBackColor = true;
@@ -154,7 +228,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(155, 24);
+            this.label2.Location = new System.Drawing.Point(159, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 3;
@@ -163,7 +237,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 24);
+            this.label1.Location = new System.Drawing.Point(6, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 2;
@@ -176,7 +250,7 @@
             "全部所有",
             "公司账号",
             "会员账号"});
-            this.accOwner.Location = new System.Drawing.Point(62, 21);
+            this.accOwner.Location = new System.Drawing.Point(62, 18);
             this.accOwner.Name = "accOwner";
             this.accOwner.Size = new System.Drawing.Size(78, 20);
             this.accOwner.TabIndex = 1;
@@ -184,19 +258,18 @@
             // 
             // accWord
             // 
-            this.accWord.Location = new System.Drawing.Point(200, 20);
+            this.accWord.Location = new System.Drawing.Point(204, 17);
             this.accWord.Name = "accWord";
-            this.accWord.Size = new System.Drawing.Size(100, 21);
+            this.accWord.Size = new System.Drawing.Size(110, 21);
             this.accWord.TabIndex = 0;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.DateTimePicker_end);
-            this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.DateTimePicker_start);
-            this.groupBox2.Location = new System.Drawing.Point(439, 13);
+            this.groupBox2.Location = new System.Drawing.Point(568, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(284, 53);
+            this.groupBox2.Size = new System.Drawing.Size(147, 118);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "选择时间";
@@ -205,25 +278,16 @@
             // 
             this.DateTimePicker_end.CustomFormat = "yyyy-MM-dd HH";
             this.DateTimePicker_end.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DateTimePicker_end.Location = new System.Drawing.Point(154, 20);
+            this.DateTimePicker_end.Location = new System.Drawing.Point(14, 78);
             this.DateTimePicker_end.Name = "DateTimePicker_end";
             this.DateTimePicker_end.Size = new System.Drawing.Size(120, 21);
             this.DateTimePicker_end.TabIndex = 2;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(135, 24);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(11, 12);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "-";
             // 
             // DateTimePicker_start
             // 
             this.DateTimePicker_start.CustomFormat = " yyyy-MM-dd HH";
             this.DateTimePicker_start.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DateTimePicker_start.Location = new System.Drawing.Point(7, 20);
+            this.DateTimePicker_start.Location = new System.Drawing.Point(12, 23);
             this.DateTimePicker_start.Name = "DateTimePicker_start";
             this.DateTimePicker_start.Size = new System.Drawing.Size(121, 21);
             this.DateTimePicker_start.TabIndex = 0;
@@ -233,7 +297,7 @@
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button1.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(733, 17);
+            this.button1.Location = new System.Drawing.Point(730, 37);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(87, 50);
             this.button1.TabIndex = 3;
@@ -273,7 +337,7 @@
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label_version, 3, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 509);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 581);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
@@ -341,7 +405,7 @@
             // 
             this.tabPage.Controls.Add(this.tabPage1);
             this.tabPage.Controls.Add(this.tabPage2);
-            this.tabPage.Location = new System.Drawing.Point(2, 75);
+            this.tabPage.Location = new System.Drawing.Point(9, 129);
             this.tabPage.Name = "tabPage";
             this.tabPage.Padding = new System.Drawing.Point(0, 0);
             this.tabPage.SelectedIndex = 0;
@@ -369,7 +433,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.33334F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.66667F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46F));
             this.tableLayoutPanel3.Controls.Add(this.page, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.label9, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.totalPage, 2, 0);
@@ -384,7 +448,7 @@
             // 
             this.page.AutoSize = true;
             this.page.Dock = System.Windows.Forms.DockStyle.Right;
-            this.page.Location = new System.Drawing.Point(29, 0);
+            this.page.Location = new System.Drawing.Point(26, 0);
             this.page.Name = "page";
             this.page.Size = new System.Drawing.Size(11, 22);
             this.page.TabIndex = 0;
@@ -394,9 +458,9 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Location = new System.Drawing.Point(46, 0);
+            this.label9.Location = new System.Drawing.Point(43, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(6, 22);
+            this.label9.Size = new System.Drawing.Size(5, 22);
             this.label9.TabIndex = 1;
             this.label9.Text = "/";
             // 
@@ -404,7 +468,7 @@
             // 
             this.totalPage.AutoSize = true;
             this.totalPage.Dock = System.Windows.Forms.DockStyle.Left;
-            this.totalPage.Location = new System.Drawing.Point(58, 0);
+            this.totalPage.Location = new System.Drawing.Point(54, 0);
             this.totalPage.Name = "totalPage";
             this.totalPage.Size = new System.Drawing.Size(17, 22);
             this.totalPage.TabIndex = 2;
@@ -501,63 +565,61 @@
             this.statu.Enabled = true;
             this.statu.Tick += new System.EventHandler(this.statu_Tick);
             // 
-            // choose
+            // groupBox3
             // 
-            this.choose.HeaderText = "选择";
-            this.choose.Name = "choose";
-            this.choose.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.choose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.groupBox3.Controls.Add(this.label8);
+            this.groupBox3.Controls.Add(this.ddlxBox);
+            this.groupBox3.Controls.Add(this.label7);
+            this.groupBox3.Controls.Add(this.qulyBox);
+            this.groupBox3.Location = new System.Drawing.Point(9, 69);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(530, 55);
+            this.groupBox3.TabIndex = 10;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "导入选项";
             // 
-            // num
+            // label8
             // 
-            this.num.HeaderText = "序号";
-            this.num.Name = "num";
-            this.num.Width = 60;
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(156, 23);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(53, 12);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "订单类型";
             // 
-            // acc
+            // ddlxBox
             // 
-            this.acc.HeaderText = "账户名";
-            this.acc.Name = "acc";
+            this.ddlxBox.FormattingEnabled = true;
+            this.ddlxBox.Items.AddRange(new object[] {
+            "2方订单",
+            "3方订单"});
+            this.ddlxBox.Location = new System.Drawing.Point(215, 19);
+            this.ddlxBox.Name = "ddlxBox";
+            this.ddlxBox.Size = new System.Drawing.Size(78, 20);
+            this.ddlxBox.TabIndex = 4;
+            this.ddlxBox.Text = "2方订单";
             // 
-            // update
+            // label7
             // 
-            this.update.HeaderText = "更新";
-            this.update.Name = "update";
-            this.update.Width = 60;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 23);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 12);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "渠道来源";
             // 
-            // insert
+            // qulyBox
             // 
-            this.insert.HeaderText = "插入";
-            this.insert.Name = "insert";
-            this.insert.Width = 60;
-            // 
-            // method
-            // 
-            this.method.HeaderText = "用途 ";
-            this.method.Name = "method";
-            this.method.Width = 80;
-            // 
-            // lastTime
-            // 
-            this.lastTime.HeaderText = "最后更新时间";
-            this.lastTime.Name = "lastTime";
-            this.lastTime.Width = 160;
-            // 
-            // status
-            // 
-            this.status.HeaderText = "状态";
-            this.status.Name = "status";
-            this.status.Width = 90;
-            // 
-            // action
-            // 
-            this.action.HeaderText = "操作";
-            this.action.Name = "action";
-            this.action.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.action.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.action.Text = "单个导单";
-            this.action.UseColumnTextForButtonValue = true;
-            this.action.Width = 80;
+            this.qulyBox.FormattingEnabled = true;
+            this.qulyBox.Items.AddRange(new object[] {
+            "常规订单",
+            "渠道ID",
+            "会员ID"});
+            this.qulyBox.Location = new System.Drawing.Point(61, 19);
+            this.qulyBox.Name = "qulyBox";
+            this.qulyBox.Size = new System.Drawing.Size(78, 20);
+            this.qulyBox.TabIndex = 2;
+            this.qulyBox.Text = "常规订单";
             // 
             // Form1
             // 
@@ -565,7 +627,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(836, 535);
+            this.ClientSize = new System.Drawing.Size(836, 607);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.tabPage);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.button1);
@@ -581,7 +644,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tabPage.ResumeLayout(false);
@@ -591,6 +653,8 @@
             this.tabPage2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -605,7 +669,6 @@
         private System.Windows.Forms.TextBox accWord;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DateTimePicker DateTimePicker_end;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DateTimePicker DateTimePicker_start;
         public System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
@@ -625,7 +688,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label_version;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Label page;
         private System.Windows.Forms.Label label9;
@@ -640,6 +702,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn lastTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridViewButtonColumn action;
+        private System.Windows.Forms.ComboBox ifuseing;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ComboBox qulyBox;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox ddlxBox;
+        private System.Windows.Forms.Label label8;
     }
 }
 

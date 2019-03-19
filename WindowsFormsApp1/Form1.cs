@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Microsoft.VisualBasic;
-
+using System.Text.RegularExpressions;
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
@@ -50,23 +50,37 @@ namespace WindowsFormsApp1
             m.Open();
             bool fetch = false; //返回SQL字符串, 并不执行
             string whereSql = "1";
-            if (accWord.Text != "")
+            //封装账号名称搜索
+            string[] sArray = Regex.Split(accWord.Text.ToString(), ",");
+            int j=0;
+            foreach(string accName in sArray)
             {
-                whereSql = whereSql + " and tp.nick like '%" + accWord.Text + "%'";
+                if (j == 0)
+                {
+                    whereSql = whereSql + " and (tp.nick like '%" + accName + "%'";
+                }
+                else
+                {
+                    whereSql = whereSql + " or tp.nick like '%" + accName + "%'";
+                }
+                j++;
             }
+            if (j > 0)
+            {
+                whereSql = whereSql + ")";
+            }
+
             switch (accOwner.Text.ToString())
             {
                 case "全部所有":  break;
                 case "公司账号": whereSql = whereSql + " and tp.owner = 0"; break;
                 case "会员账号": whereSql = whereSql + " and tp.owner > 0"; break;
             }
-            if(checkBox1.CheckState == CheckState.Checked)
+            switch(ifuseing.Text.ToString())
             {
-                whereSql = whereSql + " and tp.if_ok = 1";
-            }
-            else
-            {
-                whereSql = whereSql + " and tp.if_ok = 0";
+                case "全部所有": break;
+                case "正在使用": whereSql = whereSql + " and tp.if_ok = 1";break;
+                case "不在使用": whereSql = whereSql + " and tp.if_ok = 0";break;
             }
             int pagenum = Convert.ToInt32(page.Text);
             int pageSize = 50;
@@ -295,7 +309,19 @@ namespace WindowsFormsApp1
         private void beginImport() {
             outPutAccList.Items.Clear();
             outPutAccList.Items.Add("查看所有");//添加选中账户列表
-
+            string importUrl = ConfigHelper.GetAppConfig("importUrl");//导单地址
+            //配置全局变量
+            switch (qulyBox.Text.ToString())
+            {
+                case "常规订单":importUrl = importUrl + "order_scene=1&"; break;
+                case "渠道ID": importUrl = importUrl + "order_scene=2&"; break;
+                case "会员ID":importUrl = importUrl + "order_scene=3&"; break;
+            };
+            switch (ddlxBox.Text.ToString())
+            {
+                case "2方订单": importUrl = importUrl + "order_count_type=1&"; break;
+                case "3方订单": importUrl = importUrl + "order_count_type=2&"; break;
+            };
             if (doAccList.Count > 0)
             {
 
@@ -339,7 +365,7 @@ namespace WindowsFormsApp1
                     send[1] = 1;//page参数
                     send[2] = 1;//订单类别
                     send[3] = times;//请求次数
-                    Trade trade = new Trade(acc,out_text, progressBar1, button1);
+                    Trade trade = new Trade(acc,out_text, progressBar1, button1,importUrl);
                     Trades.Add(trade);
                     trade.beginImportPress(send);
                 });
@@ -437,5 +463,12 @@ namespace WindowsFormsApp1
                 button1.Font = new Font("宋体", 14);
             }
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }
