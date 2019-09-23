@@ -122,7 +122,7 @@ namespace WindowsFormsApp1
             }
         }
         //每分钟导入订单函数
-        private void doImortTrade(string start_time, int page, int tradeType, DoWorkEventArgs e, BackgroundWorker bgWorker)
+        private void doImortTrade(string start_time, int page, int tradeType, DoWorkEventArgs e, BackgroundWorker bgWorker,string _position_index="-1")
         {
             
             var getUrl = "";
@@ -138,6 +138,10 @@ namespace WindowsFormsApp1
                     tradeTypeStr = "结算订单";
                     break;
             }
+            if (_position_index != "-1")
+            {
+                getUrl = importUrl + "&start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc+ "&position_index="+_position_index;//第二页的时候需要传递position_index
+            }
             try
             {//请求服务器
                 Console.WriteLine(getUrl);
@@ -148,6 +152,7 @@ namespace WindowsFormsApp1
                     ReObject Resault = JsonConvert.DeserializeObject<ReObject>(re);
                     string ifEnd = Resault.ifEnd;
                     string code = Resault.code;
+                    string position_index = Resault.position_index;
                     if (code == "-1")
                     {
                         //报错
@@ -180,7 +185,7 @@ namespace WindowsFormsApp1
                             //e.Result = send;
                             bgWorker.ReportProgress(1, send);
                             // handleResult(code, result);
-                            doImortTrade(start_time, page + 1, tradeType, e, bgWorker);
+                            doImortTrade(start_time, page + 1, tradeType, e, bgWorker,position_index);
                         }
                     }
                 }
@@ -208,7 +213,7 @@ namespace WindowsFormsApp1
          * 导入订单可以指定导入多少次,每次导入20分钟的
          * doTimes导入次数
          * */
-        private void doImortTrade1(string start_time, int page, int tradeType, int doTimes, DoWorkEventArgs e, BackgroundWorker bgWorker)
+        private void doImortTrade1(string start_time, int page, int tradeType, int doTimes, DoWorkEventArgs e, BackgroundWorker bgWorker, string _position_index = "-1")
         {
 
             if (bgWorker.CancellationPending)
@@ -230,7 +235,11 @@ namespace WindowsFormsApp1
                     tradeTypeStr = "结算订单";
                     break;
             }
-           try
+            if (_position_index != "-1")
+            {
+                getUrl = importUrl + "&start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc + "&position_index=" + _position_index;//第二页的时候需要传递position_index
+            }
+            try
             {
                 Console.WriteLine(getUrl);
                 string re = HttpRequestHelper.HttpGetRequest(getUrl);
@@ -238,6 +247,7 @@ namespace WindowsFormsApp1
                 ReObject Resault = JsonConvert.DeserializeObject<ReObject>(re);
                 string ifEnd = Resault.ifEnd;
                 string code = Resault.code;
+                string position_index = Resault.position_index;
                 if (doTimes >= 0)
                 {
                     if (code == "-1")
@@ -280,7 +290,7 @@ namespace WindowsFormsApp1
                             //e.Result = send;
                             bgWorker.ReportProgress(1, send);
                             //handleResult(code, result);
-                            doImortTrade1(start_time, page + 1, tradeType, doTimes, e, bgWorker);
+                            doImortTrade1(start_time, page + 1, tradeType, doTimes, e, bgWorker,position_index);
                         }
                     }
                 }
@@ -355,6 +365,7 @@ namespace WindowsFormsApp1
             public string endTime { get; set; }
             public string ifEnd { get; set; }
             public string data { get; set; }
+            public string position_index { get; set; }
         }
 
     }
