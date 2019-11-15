@@ -434,7 +434,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.33334F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.66667F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel3.Controls.Add(this.page, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.label9, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.totalPage, 2, 0);
@@ -449,7 +449,7 @@
             // 
             this.page.AutoSize = true;
             this.page.Dock = System.Windows.Forms.DockStyle.Right;
-            this.page.Location = new System.Drawing.Point(24, 0);
+            this.page.Location = new System.Drawing.Point(23, 0);
             this.page.Name = "page";
             this.page.Size = new System.Drawing.Size(11, 22);
             this.page.TabIndex = 0;
@@ -459,7 +459,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Location = new System.Drawing.Point(41, 0);
+            this.label9.Location = new System.Drawing.Point(40, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(4, 22);
             this.label9.TabIndex = 1;
@@ -469,7 +469,7 @@
             // 
             this.totalPage.AutoSize = true;
             this.totalPage.Dock = System.Windows.Forms.DockStyle.Left;
-            this.totalPage.Location = new System.Drawing.Point(51, 0);
+            this.totalPage.Location = new System.Drawing.Point(50, 0);
             this.totalPage.Name = "totalPage";
             this.totalPage.Size = new System.Drawing.Size(17, 22);
             this.totalPage.TabIndex = 2;
@@ -592,13 +592,15 @@
             // 
             this.ddlxBox.FormattingEnabled = true;
             this.ddlxBox.Items.AddRange(new object[] {
-            "2方订单",
-            "3方订单"});
+            "全部订单",
+            "新增订单",
+            "结算订单",
+            "付款订单"});
             this.ddlxBox.Location = new System.Drawing.Point(215, 19);
             this.ddlxBox.Name = "ddlxBox";
             this.ddlxBox.Size = new System.Drawing.Size(78, 20);
             this.ddlxBox.TabIndex = 4;
-            this.ddlxBox.Text = "2方订单";
+            this.ddlxBox.Text = "全部订单";
             // 
             // label7
             // 
@@ -613,14 +615,15 @@
             // 
             this.qulyBox.FormattingEnabled = true;
             this.qulyBox.Items.AddRange(new object[] {
+            "全部订单",
             "常规订单",
-            "渠道ID",
-            "会员ID"});
+            "渠道订单",
+            "会员订单"});
             this.qulyBox.Location = new System.Drawing.Point(61, 19);
             this.qulyBox.Name = "qulyBox";
             this.qulyBox.Size = new System.Drawing.Size(78, 20);
             this.qulyBox.TabIndex = 2;
-            this.qulyBox.Text = "常规订单";
+            this.qulyBox.Text = "全部订单";
             // 
             // Form1
             // 

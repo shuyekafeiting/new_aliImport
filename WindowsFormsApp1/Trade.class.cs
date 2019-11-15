@@ -51,20 +51,12 @@ namespace WindowsFormsApp1
             var receive = e.Argument as object[];
             string start_time = (string)receive[0];
             int page = (int)receive[1];
-            int tradeType = (int)receive[2];
+            string order_query_type = (string)receive[2];
             int doTimes = (int)receive[3];
+            string order_scene = (string)receive[4];
             //判断是否取消操作 
+            doImortTrade(start_time, page, doTimes, order_scene, order_query_type, e, bgWorker);
             
-            if (doTimes == -1)
-            {
-                doImortTrade(start_time, page, tradeType, e, bgWorker);
-            }
-            else
-            {
-                
-                doImortTrade1(start_time, page, tradeType, doTimes, e, bgWorker);
-            }
-
         }
         //导单后台进程结束时调用,没有使用
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -121,99 +113,11 @@ namespace WindowsFormsApp1
                 
             }
         }
-        //每分钟导入订单函数
-        private void doImortTrade(string start_time, int page, int tradeType, DoWorkEventArgs e, BackgroundWorker bgWorker,string _position_index="-1")
-        {
-            
-            var getUrl = "";
-            var tradeTypeStr = "";
-            switch (tradeType)
-            {
-                case 1:
-                    getUrl = importUrl + "&start_time=" + start_time + "&order_query_type=create_time&page_no=" + page + "&acc=" + acc;//订单创建
-                    tradeTypeStr = "创建订单";
-                    break;
-                case 2:
-                    getUrl = importUrl + "&start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc;//计算订单
-                    tradeTypeStr = "结算订单";
-                    break;
-            }
-            if (_position_index != "-1")
-            {
-                getUrl = importUrl + "&start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc+ "&position_index="+_position_index;//第二页的时候需要传递position_index
-            }
-            try
-            {//请求服务器
-                Console.WriteLine(getUrl);
-                string re = HttpRequestHelper.HttpGetRequest(getUrl);
-                Console.WriteLine(re);
-                try
-                {
-                    ReObject Resault = JsonConvert.DeserializeObject<ReObject>(re);
-                    string ifEnd = Resault.ifEnd;
-                    string code = Resault.code;
-                    string position_index = Resault.position_index;
-                    if (code == "-1")
-                    {
-                        //报错
-                        string result = Resault.data;
-                        var send = new object[2];
-                        send[0] = code;
-                        send[1] = result;
-                        //e.Result = send;汇报结束
-                        bgWorker.ReportProgress(1, send);
-                    }
-                    else
-                    {
-                        if (ifEnd == "1")
-                        {
-                            //结束
-                            string result = Resault.startTime + " " + tradeTypeStr + "P" + page + ": 共" + Resault.totalNum + "单,插入" + Resault.newNum + "单,更新" + Resault.updateNum + "单";
-                            var send = new object[2];
-                            send[0] = code;
-                            send[1] = result;
-                            //e.Result = send;
-                            bgWorker.ReportProgress(1, send);
-                        }
-                        else
-                        {
-                            //下一页
-                            string result = Resault.startTime + " " + tradeTypeStr + "P" + page + ": 共" + Resault.totalNum + "单,插入" + Resault.newNum + "单,更新" + Resault.updateNum + "单";
-                            var send = new object[2];
-                            send[0] = code;
-                            send[1] = result;
-                            //e.Result = send;
-                            bgWorker.ReportProgress(1, send);
-                            // handleResult(code, result);
-                            doImortTrade(start_time, page + 1, tradeType, e, bgWorker,position_index);
-                        }
-                    }
-                }
-                catch (Exception e1)
-                {
-                    var send = new object[2];
-                    send[0] = "-1";
-                    send[1] = "请求服务器错误:" + re;
-                    //e.Result = send;
-                    bgWorker.ReportProgress(1, send);
-                }
-
-            }
-            catch (Exception eo)
-            {
-                var send = new object[2];
-                send[0] = "-1";
-                send[1] = "请求服务器错误:" + eo.Message;
-                //e.Result = send;
-                bgWorker.ReportProgress(1, send);
-            }
-
-        }
         /**
          * 导入订单可以指定导入多少次,每次导入20分钟的
          * doTimes导入次数
          * */
-        private void doImortTrade1(string start_time, int page, int tradeType, int doTimes, DoWorkEventArgs e, BackgroundWorker bgWorker, string _position_index = "-1")
+        private void doImortTrade(string start_time, int page,  int doTimes,string order_scene, string order_query_type, DoWorkEventArgs e, BackgroundWorker bgWorker, string _position_index = "-1")
         {
             
             if (bgWorker.CancellationPending)
@@ -223,36 +127,9 @@ namespace WindowsFormsApp1
                 return;
             }
             var getUrl = "";
-            var tradeTypeStr = "";
-            switch (tradeType)
-            {
-                
-                case 1:
-                    if (_position_index != "-1")
-                    {
-                        getUrl = importUrl + "start_time=" + start_time + "&order_query_type=create_time&page_no=" + page + "&acc=" + acc + "&span=1200" + "&position_index=" + _position_index;//第二页的时候需要传递position_index
-                    }
-                    else
-                    {
-                        getUrl = importUrl + "start_time=" + start_time + "&order_query_type=create_time&page_no=" + page + "&acc=" + acc + "&span=1200";//订单创建
-                    }
-                    
-                    tradeTypeStr = "创建订单";
-                    break;
-                case 2:
-                    if (_position_index != "-1")
-                    {
-                        getUrl = importUrl + "start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc + "&span=1200"+"&position_index=" + _position_index;//第二页的时候需要传递position_index
-                    }
-                    else
-                    {
-                        getUrl = importUrl + "start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc + "&span=1200";//计算订单
-                    }
-                    
-                    tradeTypeStr = "结算订单";
-                    break;
-            } 
-           
+
+           //加工url
+           getUrl = doGetUrl(_position_index, start_time, page, order_scene, order_query_type, acc);
             try
             {
                 Console.WriteLine(getUrl);
@@ -279,9 +156,10 @@ namespace WindowsFormsApp1
                         if (ifEnd == "1")
                         {
                             doTimes = doTimes - 1;
-                            
+
                             //结束
-                            string result = Resault.startTime + " " + tradeTypeStr + "P" + page + ": 共" + Resault.totalNum + "单,插入" + Resault.newNum + "单,更新" + Resault.updateNum + "单";
+                            string result = getResultString(Resault.startTime, order_query_type, order_scene, page.ToString(), Resault.totalNum, Resault.newNum, Resault.updateNum);
+                                 
                             var send = new object[2];
                             send[0] = code;
                             send[1] = result;
@@ -292,23 +170,19 @@ namespace WindowsFormsApp1
                             DateTime t1 = Convert.ToDateTime(Resault.startTime);
                             t1 = t1.AddMinutes(20);
                             string t2 = t1.ToString("yyyy-MM-dd HH:mm:00");
-                            if (tradeType == 1)
-                            {
-
-                            }
-                            doImortTrade1(t2, 1, tradeType, doTimes, e, bgWorker);
+                            doImortTrade(t2, 1, doTimes, order_scene,order_query_type ,e, bgWorker);
                         }
                         else
                         {
                             //下一页
-                            string result = Resault.startTime + " " + tradeTypeStr + "P" + page + ":  共" + Resault.totalNum + "单,插入" + Resault.newNum + "单,更新" + Resault.updateNum + "单";
+                            string result = getResultString(Resault.startTime, order_query_type, order_scene, page.ToString(), Resault.totalNum, Resault.newNum, Resault.updateNum);
                             var send = new object[2];
                             send[0] = code;
                             send[1] = result;
                             //e.Result = send;
                             bgWorker.ReportProgress(1, send);
                             //handleResult(code, result);
-                            doImortTrade1(start_time, page + 1, tradeType, doTimes, e, bgWorker,position_index);
+                            doImortTrade(start_time, page + 1, doTimes, order_scene, order_query_type, e, bgWorker,position_index);
                         }
                     }
                 }
@@ -386,6 +260,48 @@ namespace WindowsFormsApp1
             public string position_index { get; set; }
         }
 
+        //根据_position_index加工url
+        private string doGetUrl( string _position_index ,string start_time, int page, string order_scene, string order_query_type, string acc)
+        {
+            string getUrl;
+            getUrl = importUrl + "start_time=" + start_time + "&page_no=" + page + "&acc=" + acc + "&order_query_type=" + order_query_type + "&order_scene=" + order_scene+"&span=1200";
+            if (_position_index != "-1")
+            {
+                getUrl = getUrl + "&position_index=" + _position_index;
+            }
+            return getUrl;  
+        }
+        //加工处理结果字符串
+        private string getResultString(string startTime, string tradeType,string order_scene, string page ,string totalNum ,string newNum, string updateNum )
+        {
+            switch (order_scene)
+            {
+                case "1":
+                    order_scene = "常规订单";
+                    break;
+                case "2":
+                    order_scene = "渠道订单";
+                    break;
+                case "3":
+                    order_scene = "会员订单";
+                    break;
+            }
+            switch (tradeType)
+            {
+                case "create_time":
+                    tradeType = "新增";
+                    break;
+                case "settle_time":
+                    tradeType = "结算";
+                    break;
+                case "payment_time":
+                    tradeType = "付款";
+                    break;
+            }
+            string resultStr;
+            resultStr = startTime + " " + tradeType +"-"+ order_scene + " P" + page + ": 共" + totalNum + "单,插入" + newNum + "单,更新" + updateNum + "单";
+            return resultStr;
+        }
     }
 
 }

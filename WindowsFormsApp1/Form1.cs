@@ -14,12 +14,12 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        private List<ACC> doAccList = new List<ACC> {
-            
-        };//选中账户列表
-        private List<Trade> Trades = new List<Trade> { };//新建的trade操作类list
+        private List<ACC> doAccList = new List<ACC>{ };//选中账户列表
+        private List<Trade> Trades = new List<Trade>{ };//新建的trade操作类list
         private string AppName;
         private string Version;
+        private List<string> order_scene=new List<string>{ };//订单类型
+        private List<string> order_query_type = new List<string>{ };//订单类型
         public Form1()
         {
             InitializeComponent();
@@ -213,7 +213,7 @@ namespace WindowsFormsApp1
             public string nick { get; set; }
             public string start_time { get; set; }
         }
-
+        
         private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
            
@@ -311,64 +311,93 @@ namespace WindowsFormsApp1
             outPutAccList.Items.Add("查看所有");//添加选中账户列表
             string importUrl = ConfigHelper.GetAppConfig("importUrl");//导单地址
             //配置全局变量
+            order_scene.Clear();
             switch (qulyBox.Text.ToString())
             {
-                case "常规订单":importUrl = importUrl + "order_scene=1&"; break;
-                case "渠道ID": importUrl = importUrl + "order_scene=2&"; break;
-                case "会员ID":importUrl = importUrl + "order_scene=3&"; break;
+                case "常规订单": order_scene.Add("1"); break;
+                case "渠道订单": order_scene.Add("2"); break;
+                case "会员订单": order_scene.Add("3"); break;
+                case "全部订单":
+                    order_scene.Add("1");
+                    order_scene.Add("2");
+                    order_scene.Add("3");
+                    break;
             };
+            order_query_type.Clear();
             switch (ddlxBox.Text.ToString())
             {
-                case "2方订单": importUrl = importUrl + "order_count_type=1&"; break;
-                case "3方订单": importUrl = importUrl + "order_count_type=2&"; break;
-            };
+                case "新增订单": order_query_type.Add("create_time"); break;
+                case "结算订单": order_query_type.Add("settle_time"); break;
+                case "付款订单": order_query_type.Add("payment_time"); break;
+                case "全部订单":
+                    order_query_type.Add("create_time");
+                    order_query_type.Add("settle_time");
+                    break;
+            }
+            
             if (doAccList.Count > 0)
             {
+                //限制总进程数
+                if (order_query_type.Count * doAccList.Count * order_scene.Count>180)
+                {
+                    MessageBox.Show("选择账号过多，影响导单性能");
+                    return;
+                }
 
                 int totalTimes = 0;
                 tabPage.SelectedTab = tabPage2;
                 string logStr = " 开始执行...";
+
+                string start_time = DateTimePicker_start.Value.ToString("yyyy-MM-dd HH:00:00");
+                //计算开始和结束时间相差的分钟数
+                DateTime startTime = Convert.ToDateTime(DateTimePicker_start.Value.ToString("yyyy-MM-dd HH:00:00"));
+                DateTime endTime = Convert.ToDateTime(DateTimePicker_end.Value.ToString("yyyy-MM-dd HH:00:00"));
+                TimeSpan ts = endTime - startTime;
+
+                string days = ts.Days.ToString();
+                string fz = ts.Minutes.ToString();
+                string xs = ts.Hours.ToString();
+                int totalfz = int.Parse(days) * 1440 + int.Parse(xs) * 60 + int.Parse(fz);
+                int times = totalfz / 20 * order_scene.Count * order_query_type.Count;
                 
-                doAccList.ForEach(delegate (ACC value)
+                if (times < 0)
                 {
+                    MessageBox.Show("时间选择有误");
+                    return;
+                }
+                if (times == 0)
+                {
+                    totalTimes = totalTimes + 1;
+                }
+                else
+                {
+                    totalTimes = totalTimes + 1 + times;
+                }
+
+                int i = 1;
+                
+                doAccList.ForEach(delegate (ACC value){
                     outPutAccList.Items.Add(value.nick);//添加选中账户列表
                     string acc = value.nick;
-                    string start_time = DateTimePicker_start.Value.ToString("yyyy-MM-dd HH:00:00");
-                    //计算开始和结束时间相差的分钟数
-                    DateTime startTime = Convert.ToDateTime(DateTimePicker_start.Value.ToString("yyyy-MM-dd HH:00:00"));
-                    DateTime endTime = Convert.ToDateTime(DateTimePicker_end.Value.ToString("yyyy-MM-dd HH:00:00"));
-                    TimeSpan ts = endTime - startTime;
-                    string days = ts.Days.ToString();
-                    string fz = ts.Minutes.ToString();
-                    string xs = ts.Hours.ToString();
-                    int totalfz = int.Parse(days) * 1440 + int.Parse(xs) * 60 + int.Parse(fz);
-                    int times = totalfz / 20;
-                    if (times < 0)
-                    {
-                        MessageBox.Show("时间选择有误");
-                        return;
-                    }
-                    if (times == 0)
-                    {
-                        totalTimes = totalTimes + 1;
-                    }
-                    else
-                    {
-                        totalTimes = totalTimes + 1 + times;
-                    }
-
                     //定义参数,导入创建时间订单 
                     out_text.Visible = true;
-                    //导入创建时间订单
-                    var send = new object[4];
-                    send[0] = start_time;
-                    send[1] = 1;//page参数
-                    send[2] = 1;//订单类别
-                    send[3] = times;//请求次数
-                    Trade trade = new Trade(acc,out_text, progressBar1, button1,importUrl);
-                    Trades.Add(trade);
-                    trade.beginImportPress(send);
+                    order_query_type.ForEach(delegate (string _order_query_type) {
+                        order_scene.ForEach(delegate (string _order_scene) {
+                            i++;
+                            //导入创建时间订单
+                            var send = new object[5];
+                            send[0] = start_time;
+                            send[1] = 1;//page参数
+                            send[2] = _order_query_type;//订单查询类型，创建时间“create_time”，或结算时间“settle_time”
+                            send[3] = times;//请求次数
+                            send[4] = _order_scene;//订单场景类型，1:常规订单，2:渠道订单，3:会员运营订单，默认为1
+                            Trade trade = new Trade(acc, out_text, progressBar1, button1, importUrl);
+                            Trades.Add(trade);
+                            trade.beginImportPress(send);
+                        });
+                    });
                 });
+               
                 progressBar1.Value = 0;//进度条归零
                 progressBar1.Maximum = totalTimes;//设置进度条总长度
                 //开始执行日志
@@ -462,11 +491,6 @@ namespace WindowsFormsApp1
                 progressBar1.Value = 0;
                 button1.Font = new Font("宋体", 14);
             }
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
         }
 
     }
