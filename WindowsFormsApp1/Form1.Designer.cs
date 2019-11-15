@@ -291,6 +291,7 @@
             this.DateTimePicker_start.Name = "DateTimePicker_start";
             this.DateTimePicker_start.Size = new System.Drawing.Size(121, 21);
             this.DateTimePicker_start.TabIndex = 0;
+            this.DateTimePicker_start.Value = new System.DateTime(2019, 9, 27, 17, 39, 32, 0);
             // 
             // button1
             // 
@@ -433,7 +434,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 78.33334F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.66667F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel3.Controls.Add(this.page, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.label9, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.totalPage, 2, 0);
@@ -448,7 +449,7 @@
             // 
             this.page.AutoSize = true;
             this.page.Dock = System.Windows.Forms.DockStyle.Right;
-            this.page.Location = new System.Drawing.Point(26, 0);
+            this.page.Location = new System.Drawing.Point(24, 0);
             this.page.Name = "page";
             this.page.Size = new System.Drawing.Size(11, 22);
             this.page.TabIndex = 0;
@@ -458,9 +459,9 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Location = new System.Drawing.Point(43, 0);
+            this.label9.Location = new System.Drawing.Point(41, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(5, 22);
+            this.label9.Size = new System.Drawing.Size(4, 22);
             this.label9.TabIndex = 1;
             this.label9.Text = "/";
             // 
@@ -468,7 +469,7 @@
             // 
             this.totalPage.AutoSize = true;
             this.totalPage.Dock = System.Windows.Forms.DockStyle.Left;
-            this.totalPage.Location = new System.Drawing.Point(54, 0);
+            this.totalPage.Location = new System.Drawing.Point(51, 0);
             this.totalPage.Name = "totalPage";
             this.totalPage.Size = new System.Drawing.Size(17, 22);
             this.totalPage.TabIndex = 2;

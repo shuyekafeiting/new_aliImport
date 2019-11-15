@@ -215,7 +215,7 @@ namespace WindowsFormsApp1
          * */
         private void doImortTrade1(string start_time, int page, int tradeType, int doTimes, DoWorkEventArgs e, BackgroundWorker bgWorker, string _position_index = "-1")
         {
-
+            
             if (bgWorker.CancellationPending)
             {
                 //真正取消进程
@@ -226,19 +226,33 @@ namespace WindowsFormsApp1
             var tradeTypeStr = "";
             switch (tradeType)
             {
+                
                 case 1:
-                    getUrl = importUrl + "start_time=" + start_time + "&order_query_type=create_time&page_no=" + page + "&acc=" + acc + "&span=1200";//订单创建
+                    if (_position_index != "-1")
+                    {
+                        getUrl = importUrl + "start_time=" + start_time + "&order_query_type=create_time&page_no=" + page + "&acc=" + acc + "&span=1200" + "&position_index=" + _position_index;//第二页的时候需要传递position_index
+                    }
+                    else
+                    {
+                        getUrl = importUrl + "start_time=" + start_time + "&order_query_type=create_time&page_no=" + page + "&acc=" + acc + "&span=1200";//订单创建
+                    }
+                    
                     tradeTypeStr = "创建订单";
                     break;
                 case 2:
-                    getUrl = importUrl + "start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc + "&span=1200";//计算订单
+                    if (_position_index != "-1")
+                    {
+                        getUrl = importUrl + "start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc + "&span=1200"+"&position_index=" + _position_index;//第二页的时候需要传递position_index
+                    }
+                    else
+                    {
+                        getUrl = importUrl + "start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc + "&span=1200";//计算订单
+                    }
+                    
                     tradeTypeStr = "结算订单";
                     break;
-            }
-            if (_position_index != "-1")
-            {
-                getUrl = importUrl + "&start_time=" + start_time + "&order_query_type=settle_time&page_no=" + page + "&acc=" + acc + "&position_index=" + _position_index;//第二页的时候需要传递position_index
-            }
+            } 
+           
             try
             {
                 Console.WriteLine(getUrl);
@@ -278,6 +292,10 @@ namespace WindowsFormsApp1
                             DateTime t1 = Convert.ToDateTime(Resault.startTime);
                             t1 = t1.AddMinutes(20);
                             string t2 = t1.ToString("yyyy-MM-dd HH:mm:00");
+                            if (tradeType == 1)
+                            {
+
+                            }
                             doImortTrade1(t2, 1, tradeType, doTimes, e, bgWorker);
                         }
                         else

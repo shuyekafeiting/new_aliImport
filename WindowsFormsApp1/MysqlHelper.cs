@@ -362,6 +362,7 @@ namespace WindowsFormsApp1
         /// <returns></returns>
         public DataTable Query(string sql)
         {
+            
             this.Command.CommandText = sql;
             MySqlDataAdapter adpter = new MySqlDataAdapter(this.Command);
             DataTable dt = new DataTable("Table");
