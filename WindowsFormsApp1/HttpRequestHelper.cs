@@ -16,6 +16,7 @@ public static class HttpRequestHelper
         try
         {
             var getRequest = CreateHttpRequest(url, "GET");
+            getRequest.Timeout = 1000 * 1000;//超时
             var getResponse = getRequest.GetResponse() as HttpWebResponse;
             strGetResponse = GetHttpResponse(getResponse, "GET");
         }

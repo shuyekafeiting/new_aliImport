@@ -20,6 +20,8 @@ namespace WindowsFormsApp1
         private string Version;
         private List<string> order_scene=new List<string>{ };//订单类型
         private List<string> order_query_type = new List<string>{ };//订单类型
+        private int ifHanldTheErrorAccs = 0;//是否结束，仅仅用来判断是否显示报错的账号
+        private List<ERRORACC> errAccs = new List<ERRORACC> { };//导单有错的账号
         public Form1()
         {
             InitializeComponent();
@@ -46,7 +48,7 @@ namespace WindowsFormsApp1
             accData.Columns.Add(new DataColumn("method", typeof(string)));
             DataRow dr;
             MySQL m = new MySQL("taopid", "fanli_");
-            m.ConnectionString = "server=rm-wz951u7s1jvhkz883so.mysql.rds.aliyuncs.com;User Id=www_xfz178;password=XL00Fc@iDSC8NbZH;Database=xfz178_com;Charset=utf8";
+            m.ConnectionString = "server=aikbao.rwlb.rds.aliyuncs.com;User Id=exe_readonly;password=!FjopU#e2fa3SovC;Database=xfz178_com;Charset=utf8";
             m.Open();
             bool fetch = false; //返回SQL字符串, 并不执行
             string whereSql = "1";
@@ -223,8 +225,9 @@ namespace WindowsFormsApp1
         {
             if(progressBar1.Value == 0 || progressBar1.Value==progressBar1.Maximum)
             {
+                
                 beginImport();
-                button1.Text = "停止";
+               
             }
             else
             {
@@ -307,6 +310,9 @@ namespace WindowsFormsApp1
         }
         //开始导单
         private void beginImport() {
+            button1.Text = "停止";
+            errAccs.Clear();//清空所有错误账号
+            ifHanldTheErrorAccs = 0;
             outPutAccList.Items.Clear();
             outPutAccList.Items.Add("查看所有");//添加选中账户列表
             string importUrl = ConfigHelper.GetAppConfig("importUrl");//导单地址
@@ -358,7 +364,8 @@ namespace WindowsFormsApp1
                 string fz = ts.Minutes.ToString();
                 string xs = ts.Hours.ToString();
                 int totalfz = int.Parse(days) * 1440 + int.Parse(xs) * 60 + int.Parse(fz);
-                int times = totalfz / 20 * order_scene.Count * order_query_type.Count;
+                int times = totalfz / 20 ;
+              
                 
                 if (times < 0)
                 {
@@ -375,31 +382,36 @@ namespace WindowsFormsApp1
                 }
 
                 int i = 1;
-                
-                doAccList.ForEach(delegate (ACC value){
-                    outPutAccList.Items.Add(value.nick);//添加选中账户列表
-                    string acc = value.nick;
-                    //定义参数,导入创建时间订单 
-                    out_text.Visible = true;
-                    order_query_type.ForEach(delegate (string _order_query_type) {
+                int ai = 0;
+                out_text.Visible = true;
+                order_query_type.ForEach(delegate (string _order_query_type) {
                         order_scene.ForEach(delegate (string _order_scene) {
-                            i++;
-                            //导入创建时间订单
-                            var send = new object[5];
-                            send[0] = start_time;
-                            send[1] = 1;//page参数
-                            send[2] = _order_query_type;//订单查询类型，创建时间“create_time”，或结算时间“settle_time”
-                            send[3] = times;//请求次数
-                            send[4] = _order_scene;//订单场景类型，1:常规订单，2:渠道订单，3:会员运营订单，默认为1
-                            Trade trade = new Trade(acc, out_text, progressBar1, button1, importUrl);
-                            Trades.Add(trade);
-                            trade.beginImportPress(send);
+                            ai++;
+                            doAccList.ForEach(delegate (ACC value) {
+                                if(ai ==1)
+                                {
+                                    //第一次循环导单账户
+                                    outPutAccList.Items.Add(value.nick);//添加选中账户列表   
+                                }
+                                string acc = value.nick;
+                                //定义参数,导入创建时间订单 
+                                i++;
+                                //导入创建时间订单
+                                var send = new object[5];
+                                send[0] = start_time;
+                                send[1] = 1;//page参数
+                                send[2] = _order_query_type;//订单查询类型，创建时间“create_time”，或结算时间“settle_time”
+                                send[3] = times;//请求次数
+                                send[4] = _order_scene;//订单场景类型，1:常规订单，2:渠道订单，3:会员运营订单，默认为1
+                                Trade trade = new Trade(acc, out_text, progressBar1, button1, importUrl);
+                                Trades.Add(trade);
+                                trade.beginImportPress(send);
                         });
                     });
                 });
                
                 progressBar1.Value = 0;//进度条归零
-                progressBar1.Maximum = totalTimes;//设置进度条总长度
+                progressBar1.Maximum = totalTimes * order_scene.Count * order_query_type.Count*doAccList.Count;//设置进度条总长度
                 //开始执行日志
                 out_text.Text = logStr;
 
@@ -415,7 +427,6 @@ namespace WindowsFormsApp1
         }
         private void progressBar1_ParentChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("oh yes");
             if (progressBar1.Value == progressBar1.Maximum)
             {
                 progressBar1.BackColor = Color.Gray;
@@ -491,6 +502,12 @@ namespace WindowsFormsApp1
                 progressBar1.Value = 0;
                 button1.Font = new Font("宋体", 14);
             }
+        }
+        //处理报错的账号
+        public class ERRORACC
+        {
+            public string name;
+            public string reseaon;
         }
 
     }
