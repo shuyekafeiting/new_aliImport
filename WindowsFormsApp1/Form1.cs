@@ -364,7 +364,7 @@ namespace WindowsFormsApp1
                 string fz = ts.Minutes.ToString();
                 string xs = ts.Hours.ToString();
                 int totalfz = int.Parse(days) * 1440 + int.Parse(xs) * 60 + int.Parse(fz);
-                int times = totalfz / 20 ;
+                int times = totalfz / 10 ;
               
                 
                 if (times < 0)
@@ -510,5 +510,10 @@ namespace WindowsFormsApp1
             public string reseaon;
         }
 
+        private void button7_Click(object sender, EventArgs e)
+        {
+            订单检查 form2 = new 订单检查();
+            form2.Show();
+        }
     }
 }

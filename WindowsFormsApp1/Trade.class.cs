@@ -107,7 +107,7 @@ namespace WindowsFormsApp1
             {
                 ProgressBar.Value = ProgressBar.Maximum;
             }
-            Console.WriteLine(info + System.Environment.NewLine);
+            //Console.WriteLine(info + System.Environment.NewLine);
             WriteLog(info + System.Environment.NewLine);
         }
         /**
@@ -168,7 +168,7 @@ namespace WindowsFormsApp1
                             //handleResult(code, result);
                             //增加20分钟继续
                             DateTime t1 = Convert.ToDateTime(Resault.startTime);
-                            t1 = t1.AddMinutes(20);
+                            t1 = t1.AddMinutes(10);
                             string t2 = t1.ToString("yyyy-MM-dd HH:mm:00");
                             doImortTrade(t2, 1, doTimes, order_scene, order_query_type, e, bgWorker);
                         }
@@ -180,6 +180,7 @@ namespace WindowsFormsApp1
                             send[0] = code;
                             send[1] = result;
                             send[2] = acc;
+                            bgWorker.ReportProgress(1, send);
                             //handleResult(code, result);
                             doImortTrade(start_time, page + 1, doTimes, order_scene, order_query_type, e, bgWorker, position_index);
                         }
@@ -263,7 +264,7 @@ namespace WindowsFormsApp1
         private string doGetUrl(string _position_index, string start_time, int page, string order_scene, string order_query_type, string acc)
         {
             string getUrl;
-            getUrl = importUrl + "start_time=" + start_time + "&page_no=" + page + "&acc=" + acc + "&order_query_type=" + order_query_type + "&order_scene=" + order_scene + "&span=1200&eleme=110";
+            getUrl = importUrl + "start_time=" + start_time + "&page_no=" + page + "&acc=" + acc + "&order_query_type=" + order_query_type + "&order_scene=" + order_scene + "&span=600";
             if (_position_index != "-1")
             {
                 getUrl = getUrl + "&position_index=" + _position_index;
